@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Streams Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin: 10px 5px 10px 0;
+            padding: 10px 15px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button.add {
+            background-color: #4CAF50;
+        }
+        button.edit {
+            background-color: #FFA500;
+        }
+        button.delete {
+            background-color: #f44336;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Event Streams</h2>
+
+<button class="add" onclick="addRow()">Add</button>
+<button class="edit" onclick="editRow()">Edit</button>
+<button class="delete" onclick="deleteRow()">Delete</button>
+
+<div class="nav">
+    <a href="index.html">Homepage</a>
+    <a href="leg.html">Leagues</a>
+    <a href="ven.html">Venues</a>
+    <a href="team.html">Teams</a>
+    <a href="sport.html">Sports</a>
+    <a href="player.html">Players</a>
+    <a href="event.html">Events</a>
+    <a href="competingTeams.html">Competing Teams</a>
+    <a href="EventStreams.html">Event Streams</a>
+    <a href="stramService.html">Streaming Services</a>
+</div>
+
+<table id="eventStreamsTable">
+    <tr>
+        <th>EventStreamID</th>
+        <th>EventID</th>
+        <th>ServiceID</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>1</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>2</td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>2</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>3</td>
+        <td>1</td>
+    </tr>
+</table>
+
+
+
+</body>
+</html>

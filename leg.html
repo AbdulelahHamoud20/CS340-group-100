@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leagues Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Leagues</h2>
+
+<button onclick="addRow()">Add</button>
+<div class="nav">
+    <a href="index.html">Homepage</a>
+    <a href="leg.html">Leagues</a>
+    <a href="ven.html">Venues</a>
+    <a href="team.html">Teams</a>
+    <a href="sport.html">Sports</a>
+    <a href="player.html">Players</a>
+    <a href="event.html">Events</a>
+    <a href="competingTeams.html">Competing Teams</a>
+    <a href="EventStreams.html">Event Streams</a>
+    <a href="stramService.html">Streaming Services</a>
+</div>
+
+<table id="leaguesTable">
+    <tr>
+        <th>LeagueID</th>
+        <th>Name</th>
+        <th>YearFounded</th>
+        <th>Commissioner</th>
+        <th>SportID</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>NFL</td>
+        <td>1920</td>
+        <td>Roger Goodell</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>MLS</td>
+        <td>1993</td>
+        <td>Don Garber</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>NBA</td>
+        <td>1946</td>
+        <td>Adam Silver</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>MLB</td>
+        <td>1869</td>
+        <td>Rob Manfred</td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>NHL</td>
+        <td>1917</td>
+        <td>Gary Bettman</td>
+        <td>5</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>CFL</td>
+        <td>1958</td>
+        <td>Randy Ambrosie</td>
+        <td>1</td>
+    </tr>
+</table>
+
+
+
+</body>
+</html>

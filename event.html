@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin: 10px 5px 10px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button.edit {
+            background-color: blue;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Events</h2>
+
+<button onclick="addRow()">Add</button>
+<button class="edit" onclick="editRow()">Edit</button>
+<div class="nav">
+    <a href="index.html">Homepage</a>
+    <a href="leg.html">Leagues</a>
+    <a href="ven.html">Venues</a>
+    <a href="team.html">Teams</a>
+    <a href="sport.html">Sports</a>
+    <a href="player.html">Players</a>
+    <a href="event.html">Events</a>
+    <a href="competingTeams.html">Competing Teams</a>
+    <a href="EventStreams.html">Event Streams</a>
+    <a href="stramService.html">Streaming Services</a>
+</div>
+
+<table id="eventsTable">
+    <tr>
+        <th>EventID</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>VenueID</th>
+        <th>SportID</th>
+        <th>Score</th>
+        <th>LeagueID</th>
+        <th>TicketPrice</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Super Bowl</td>
+        <td>2024-02-10 18:00:00</td>
+        <td>1</td>
+        <td>1</td>
+        <td>31-27</td>
+        <td>1</td>
+        <td>1000.0000</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>MLS final</td>
+        <td>2024-07-12 20:00:00</td>
+        <td>3</td>
+        <td>2</td>
+        <td>2-1</td>
+        <td>2</td>
+        <td>130.0000</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>MLS Regular Season</td>
+        <td>2025-01-05 18:00:00</td>
+        <td>3</td>
+        <td>2</td>
+        <td>NULL</td>
+        <td>2</td>
+        <td>30.0000</td>
+    </tr>
+</table>
+
+
+
+</body>
+</html>
