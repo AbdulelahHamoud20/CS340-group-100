@@ -8,7 +8,11 @@ Manipulates data in the Events table
 */
 
 -- Display the content of the Events table
-SELECT * FROM Events;
+SELECT Events.EventID, Events.Name, Events.Date, Venues.Name AS Venue, Sports.Name AS Sport, Events.Score, Leagues.Name AS League, Events.TicketPrice
+FROM Events
+JOIN Venues ON Events.VenueID = Venues.VenueID
+JOIN Sports ON Events.SportID = Sports.SportID
+JOIN Leagues ON Events.LeagueID = Leagues.LeagueID;
 
 -- Add a new event
 INSERT INTO Events (
@@ -48,7 +52,10 @@ Manipulates data in the CompetingTeams table
 */
 
 -- Display the content of the CompetingTeams table
-SELECT * FROM CompetingTeams;
+SELECT CompetingTeams.CompetingTeamID, Events.Name AS Event, Teams.Name as Team
+FROM CompetingTeams
+JOIN Events ON CompetingTeams.EventID = Events.EventID
+JOIN Teams ON CompetingTeams.TeamID = Teams.TeamID;
 
 -- Add a new competing team (M-to-M relationship addition)
 INSERT INTO CompetingTeams (
@@ -66,7 +73,9 @@ Manipulates data in the Teams table
 */
 
 -- Display the content of the Teams table
-SELECT * FROM Teams;
+SELECT Teams.TeamID, Teams.Name, Teams.Coach, Sports.Name AS Sport
+FROM Teams
+JOIN Sports ON Teams.SportID = Sports.SportID;
 
 -- Add a new team 
 INSERT INTO Teams (
@@ -86,7 +95,15 @@ Manipulates data in the Players table
 */
 
 -- Display the content of the Players table
-SELECT * FROM Players;
+SELECT Players.PlayerID, Players.Name, Players.Position, Teams.Name AS Team
+FROM Players
+JOIN Teams ON Players.TeamID = Teams.TeamID;
+
+-- Search for and diplsay a player using the search bar 
+SELECT Players.PlayerID, Players.Name, Players.Position, Teams.Name AS Team
+FROM Players
+JOIN Teams ON Players.TeamID = Teams.TeamID
+WHERE Players.Name = ~Player_Name_Search_Input;
 
 -- Add a new player
 INSERT INTO Players (
@@ -106,7 +123,10 @@ Manipulates data in the EventStreams table
 */
 
 -- Display the content of the EventStreams table 
-SELECT * FROM EventStreams;
+SELECT EventStreams.EventStreamID, Events.Name AS Event, StreamingServices.Name as StreamingService
+FROM EventStreams
+JOIN Events ON EventStreams.EventID = Events.EventID
+JOIN StreamingServices ON EventStreams.ServiceID = StreamingServices.ServiceID;
 
 -- Add new streamed event (M-to-M relationship addition)
 INSERT INTO EventStreams (
@@ -172,7 +192,9 @@ Manipulates data in the Leagues table
 */
 
 -- Display the content of the Leagues table
-SELECT * FROM Leagues;
+SELECT Leagues.LeagueID, Leagues.Name, Leagues.YearFounded, Leagues.Commisioner, Sports.Name AS Sport
+FROM Leagues
+JOIN Sports ON Leagues.SportID = Sports.SportID;
 
 -- Add a new league
 INSERT INTO Leagues (
