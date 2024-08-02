@@ -30,13 +30,31 @@
         button:hover {
             background-color: #45a049;
         }
+        .edit-btn {
+            background-color: #FFA500;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
 <h2>Teams</h2>
 
-<button onclick="addRow()">Add</button>
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search for teams...">
+    <button onclick="searchTeam()">Search Team</button>
+</div>
+
+<button onclick="showAddForm()">Add Team</button>
+
 <div class="nav">
     <a href="index.html">Homepage</a>
     <a href="leg.html">Leagues</a>
@@ -52,36 +70,57 @@
 
 <table id="teamsTable">
     <tr>
+        <th>Actions</th>
         <th>TeamID</th>
         <th>Name</th>
         <th>Coach</th>
         <th>SportID</th>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>1</td>
         <td>Seattle Seahawks</td>
         <td>Pete Carroll</td>
         <td>1</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>2</td>
         <td>Cincinnati Bengals</td>
         <td>Zac Taylor</td>
         <td>1</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>3</td>
         <td>Seattle Sounders FC</td>
         <td>Brian Schmetzer</td>
         <td>2</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>4</td>
         <td>Portland Timbers</td>
         <td>Giovanni Savarese</td>
         <td>2</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>5</td>
         <td>FC Dallas</td>
         <td>Nico Estevez</td>
@@ -89,7 +128,21 @@
     </tr>
 </table>
 
+<div class="form-container" id="formContainer" style="display:none;">
+    <h3 id="formTitle">Add Team</h3>
+    <form id="teamForm">
+        <input type="hidden" id="teamID">
+        <label for="teamName">Name:</label>
+        <input type="text" id="teamName" required>
+        <label for="teamCoach">Coach:</label>
+        <input type="text" id="teamCoach" required>
+        <label for="sportID">SportID:</label>
+        <select id="sportID" required></select>
+        <button type="submit" onclick="submitForm(event)">Submit</button>
+    </form>
+</div>
 
+<script src="Js/team.js"></script>
 
 </body>
 </html>

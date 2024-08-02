@@ -20,7 +20,7 @@
             background-color: #f2f2f2;
         }
         button {
-            margin: 10px 0;
+            margin: 10px 5px 10px 0;
             padding: 10px 15px;
             background-color: #4CAF50;
             color: white;
@@ -28,17 +28,33 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: #45a049;
+            opacity: 0.8;
+        }
+        .edit-btn {
+            background-color: #FFA500;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
         }
     </style>
 </head>
-
-
 <body>
 
 <h2>Streaming Services</h2>
 
-<button onclick="addRow()">Add</button>
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search for services...">
+    <button onclick="searchService()">Search Service</button>
+</div>
+
+<button onclick="showAddForm()">Add Service</button>
+
 <div class="nav">
     <a href="index.html">Homepage</a>
     <a href="leg.html">Leagues</a>
@@ -49,38 +65,67 @@
     <a href="event.html">Events</a>
     <a href="competingTeams.html">Competing Teams</a>
     <a href="EventStreams.html">Event Streams</a>
-    <a href="stramService.html">Streaming Services</a>
+    <a href="streamService.html">Streaming Services</a>
 </div>
 
 <table id="streamingServicesTable">
     <tr>
+        <th>Actions</th>
         <th>ServiceID</th>
         <th>Name</th>
         <th>Description</th>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>1</td>
         <td>YouTube TV</td>
         <td>YouTube offers live TV, on-demand video, and cloud-based DVR from more than 85 television networks, including major broadcast and cable channels.</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>2</td>
         <td>Peacock</td>
         <td>Peacock offers a mix of live and on-demand content. It features TV shows, movies, news, sports, and exclusive original programming.</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>3</td>
         <td>Fubo</td>
         <td>Fubo offers a wide range of sports channels and events.</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>4</td>
         <td>Hulu</td>
         <td>Offers a vast library of on-demand TV shows, movies, and original content. It also offers a live TV option, which includes major broadcast and cable channels.</td>
     </tr>
 </table>
 
+<div class="form-container" id="formContainer" style="display:none;">
+    <h3 id="formTitle">Add Service</h3>
+    <form id="serviceForm">
+        <input type="hidden" id="serviceID">
+        <label for="serviceName">Name:</label>
+        <input type="text" id="serviceName" required>
+        <label for="serviceDescription">Description:</label>
+        <textarea id="serviceDescription" required></textarea>
+        <button type="submit" onclick="submitForm(event)">Submit</button>
+    </form>
+</div>
 
+<script src="Js/streamService.js"></script>
 
 </body>
 </html>

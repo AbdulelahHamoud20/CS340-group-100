@@ -27,11 +27,20 @@
             border: none;
             cursor: pointer;
         }
-        button.edit {
-            background-color: blue;
-        }
         button:hover {
             opacity: 0.8;
+        }
+        .edit-btn {
+            background-color: #FFA500;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -39,8 +48,13 @@
 
 <h2>Events</h2>
 
-<button onclick="addRow()">Add</button>
-<button class="edit" onclick="editRow()">Edit</button>
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search for events...">
+    <button onclick="searchEvent()">Search Event</button>
+</div>
+
+<button onclick="showAddForm()">Add Event</button>
+
 <div class="nav">
     <a href="index.html">Homepage</a>
     <a href="leg.html">Leagues</a>
@@ -56,6 +70,7 @@
 
 <table id="eventsTable">
     <tr>
+        <th>Actions</th>
         <th>EventID</th>
         <th>Name</th>
         <th>Date</th>
@@ -66,6 +81,10 @@
         <th>TicketPrice</th>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>1</td>
         <td>Super Bowl</td>
         <td>2024-02-10 18:00:00</td>
@@ -76,6 +95,10 @@
         <td>1000.0000</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>2</td>
         <td>MLS final</td>
         <td>2024-07-12 20:00:00</td>
@@ -86,6 +109,10 @@
         <td>130.0000</td>
     </tr>
     <tr>
+        <td>
+            <button class="edit-btn" onclick="showEditForm(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
         <td>3</td>
         <td>MLS Regular Season</td>
         <td>2025-01-05 18:00:00</td>
@@ -97,7 +124,29 @@
     </tr>
 </table>
 
+<div class="form-container" id="formContainer" style="display:none;">
+    <h3 id="formTitle">Add Event</h3>
+    <form id="eventForm">
+        <input type="hidden" id="eventID">
+        <label for="eventName">Name:</label>
+        <input type="text" id="eventName" required>
+        <label for="eventDate">Date:</label>
+        <input type="datetime-local" id="eventDate" required>
+        <label for="venueID">VenueID:</label>
+        <input type="number" id="venueID" required>
+        <label for="sportID">SportID:</label>
+        <input type="number" id="sportID" required>
+        <label for="eventScore">Score:</label>
+        <input type="text" id="eventScore">
+        <label for="leagueID">LeagueID:</label>
+        <input type="number" id="leagueID" required>
+        <label for="ticketPrice">TicketPrice:</label>
+        <input type="number" id="ticketPrice" step="0.01" required>
+        <button type="submit" onclick="submitForm(event)">Submit</button>
+    </form>
+</div>
 
+<script src="Js/event.js"></script>
 
 </body>
 </html>
