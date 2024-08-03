@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/public_html'));
     ROUTES
 */
 // Default route for the homepage
-app.get('/index.html', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public_html/index.html');
 });
 
