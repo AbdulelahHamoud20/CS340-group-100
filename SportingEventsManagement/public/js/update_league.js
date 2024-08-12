@@ -7,10 +7,10 @@ Reworked the request to better accomodate the attributes of the corresponding ta
 */
 
 // Get the objects we need to modify
-let updatePersonForm = document.getElementById('update-league-form-ajax');
+let updateLeagueForm = document.getElementById('update-league-form-ajax');
 
 // Modify the objects we need
-updatePersonForm.addEventListener("submit", function (e) {
+updateLeagueForm.addEventListener("submit", function (e) {
    
     // Prevent the form from submitting
     e.preventDefault();

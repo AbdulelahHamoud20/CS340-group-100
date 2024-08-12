@@ -27,19 +27,50 @@ function deleteEvent(EventID) {
   
 // Removes the entry from the user-facing table
 function deleteRow(EventID) {
+    
     let table = document.getElementById("events-table");
     for (let i = 0, row; row = table.rows[i]; i++) {
         if (table.rows[i].getAttribute("data-value") == EventID) {
             table.deleteRow(i);
-            deleteDropDownMenu(EventID)
-            break;
         }
     }
+
+    table = document.getElementById("competingteams-table");
+    for (let i = table.rows.length - 1; i >= 0; i--) {
+        if (table.rows[i].getAttribute("data-value") == EventID) {
+            table.rows[i].remove();
+        }
+    }
+
+    table = document.getElementById("eventstreams-table");
+    for (let i = table.rows.length - 1; i >= 0; i--) {
+        if (table.rows[i].getAttribute("data-value") == EventID) {
+            table.rows[i].remove();
+        }
+    }
+
+    deleteDropDownMenu(EventID)
 }
 
-// Removes the deleted entry from the edit dropdown list
+// Removes the deleted entry from the dropdown lists
 function deleteDropDownMenu(EventID) {
     let selectMenu = document.getElementById("input-event-update");
+    for (let i = 0; i < selectMenu.length; i++) {
+        if (Number(selectMenu.options[i].attributes[0].value) === Number(EventID)) {
+            selectMenu[i].remove();
+        }
+    }
+    
+    selectMenu = document.getElementById("input-streamedevent");
+
+    for (let i = 0; i < selectMenu.length; i++) {
+        if (Number(selectMenu.options[i].attributes[0].value) === Number(EventID)) {
+            selectMenu[i].remove();
+        }
+    }
+    
+    selectMenu = document.getElementById("input-event");
+
     for (let i = 0; i < selectMenu.length; i++) {
         if (Number(selectMenu.options[i].attributes[0].value) === Number(EventID)) {
             selectMenu[i].remove();

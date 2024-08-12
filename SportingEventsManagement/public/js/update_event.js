@@ -107,15 +107,70 @@ function updateRow(data, EventID){
             ticketpricetd.innerHTML = parsedData.rows[0].TicketPrice; 
        }    
     }
+
+    table = document.getElementById("competingteams-table");
+
+    for (let i = 0, row; row = table.rows[i]; i++) {
+        //iterate through rows
+        //rows would be accessed using the "row" variable assigned in the for loop
+        if (table.rows[i].getAttribute("data-value") == EventID) {
+ 
+             // Get the location of the row where we found the matching ID
+             let updateRowIndex = table.getElementsByTagName("tr")[i];
+ 
+             // Get td of current table values
+             let eventtd = updateRowIndex.getElementsByTagName("td")[1];
+ 
+             // Reassign current values to our values we updated to
+             eventtd.innerHTML = parsedData.rows[0].Name; 
+
+        }
+    }
+
+    table = document.getElementById("eventstreams-table");
+
+    for (let i = 0, row; row = table.rows[i]; i++) {
+        //iterate through rows
+        //rows would be accessed using the "row" variable assigned in the for loop
+        if (table.rows[i].getAttribute("data-value") == EventID) {
+ 
+             // Get the location of the row where we found the matching ID
+             let updateRowIndex = table.getElementsByTagName("tr")[i];
+ 
+             // Get td of current table values
+             let eventtd = updateRowIndex.getElementsByTagName("td")[1];
+ 
+             // Reassign current values to our values we updated to
+             eventtd.innerHTML = parsedData.rows[0].Name; 
+
+        }
+    }
+
 }
 
+// Updates the dropdowns that use the event name
 function updateDropDownMenu(data, EventID) {
     let parsedData = JSON.parse(data);
     let selectMenu = document.getElementById("input-event-update");
     for (let i = 0; i < selectMenu.length; i++) {
         if (Number(selectMenu.options[i].attributes[0].value) === Number(EventID)) {
             selectMenu[i].innerHTML = parsedData.rows[0].Name;
-            break;
+        }
+    }
+
+    selectMenu = document.getElementById("input-streamedevent");
+
+    for (let i = 0; i < selectMenu.length; i++) {
+        if (Number(selectMenu.options[i].attributes[0].value) === Number(EventID)) {
+            selectMenu[i].innerHTML = parsedData.rows[0].Name;
+        }
+    }
+
+    selectMenu = document.getElementById("input-event");
+
+    for (let i = 0; i < selectMenu.length; i++) {
+        if (Number(selectMenu.options[i].attributes[0].value) === Number(EventID)) {
+            selectMenu[i].innerHTML = parsedData.rows[0].Name;
         }
     }
 }

@@ -68,6 +68,34 @@ app.get('/events', function(req, res)
     ORDER BY EventID ASC;
     `;
 
+    let selectCompetingTeamsQuery = 
+    `
+    SELECT CompetingTeams.CompetingTeamID, Events.EventID, Events.Name AS Event, Teams.Name as Team
+    FROM CompetingTeams
+    JOIN Events ON CompetingTeams.EventID = Events.EventID
+    JOIN Teams ON CompetingTeams.TeamID = Teams.TeamID
+    ORDER BY CompetingTeamID ASC;
+    `
+
+    let selectEventStreamsQuery =
+    `
+    SELECT EventStreams.EventStreamID, Events.EventID, Events.Name AS Event, StreamingServices.Name as StreamingService
+    FROM EventStreams
+    JOIN Events ON EventStreams.EventID = Events.EventID
+    JOIN StreamingServices ON EventStreams.ServiceID = StreamingServices.ServiceID
+    ORDER BY EventStreamID ASC;
+    `
+
+    let selectTeamsQuery = 
+    `
+    SELECT * FROM Teams;
+    `
+
+    let selectStreamingServicesQuery =
+    `
+    SELECT * FROM StreamingServices;
+    `
+
     // Execute the queries
     db.pool.query(selectEventsQuery, function(error, rows, fields){
         
@@ -87,10 +115,30 @@ app.get('/events', function(req, res)
                     
                     let leagues = rows
 
-                    // Render the index.hbs file, and also send the renderer
-                    // an object where 'data' is equal to the 'rows' we
-                    // received back from the query
-                    return res.render('events', {data: events, venues: venues, sports: sports, leagues: leagues});  
+                    db.pool.query(selectCompetingTeamsQuery, (error, rows, fields) => {
+                        
+                        let competingTeams = rows
+
+                        db.pool.query(selectEventStreamsQuery, (error, rows, fields) => {
+                            
+                            let eventStreams = rows
+                            
+                            db.pool.query(selectTeamsQuery, (error, rows, fields) => {
+                                
+                                let teams = rows
+
+                                db.pool.query(selectStreamingServicesQuery, (error, rows, fields) => {
+
+                                    let streamingServices = rows
+
+                                    // Render the index.hbs file, and also send the renderer
+                                    // an object where 'data' is equal to the 'rows' we
+                                    // received back from the query
+                                    return res.render('events', {data: events, venues: venues, sports: sports, leagues: leagues, competingTeams: competingTeams, eventStreams: eventStreams, teams: teams, streamingServices: streamingServices});
+                                })
+                            })
+                        })
+                    })
                 })                                                                
             })                                                                  
         })   
@@ -174,46 +222,16 @@ app.delete('/delete-event-ajax/', function(req, res, next)
     let data = req.body;
     let EventID = parseInt(data.id);
     let deleteEventQuery = `DELETE FROM Events WHERE EventID = ?`;
-    let deleteEventStreamsQuery = `DELETE FROM EventStreams WHERE EventID = ?`;
-    let deleteCompetingTeamsQuery = `DELETE FROM CompetingTeams WHERE EventID = ?`;
   
-  
-    // Run the 1st query
-    db.pool.query(deleteCompetingTeamsQuery, [EventID], function(error, rows, fields){
+    db.pool.query(deleteEventQuery, [EventID], function(error, rows, fields) {
+
         if (error) {
-
-        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-        console.log(error);
-        res.sendStatus(400);
+            console.log(error)
+            res.sendStatus(400)
         }
-
         else
         {
-            // Run the 2nd query
-            db.pool.query(deleteEventStreamsQuery, [EventID], function(error, rows, fields) {
-
-                if (error) {
-                    console.log(error);
-                    res.sendStatus(400);
-                } 
-                
-                else 
-                {
-                    // Run the 3rd query
-                    db.pool.query(deleteEventQuery, [EventID], function(error, rows, fields) {
-
-                        if (error) {
-                            console.log(error)
-                            res.sendStatus(400)
-                        }
-
-                        else
-                        {
-                            res.sendStatus(204);
-                        }
-                    })
-                }
-            })
+            res.sendStatus(204);
         }
     })
 });
@@ -267,6 +285,205 @@ app.put('/put-event-ajax', function(req, res, next)
         { 
             // Run the 2nd query
             db.pool.query(selectEventsQuery, [eventid], function(error, rows, fields){
+                if (error) {
+        
+                // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                console.log(error);
+                res.sendStatus(400);
+                }
+
+                else
+                {   
+                    res.send({rows});
+                }
+            })
+        }
+    })
+});
+
+// CompetingTeams
+app.post('/add-competingteam-ajax', function(req, res) 
+{
+    
+    let data = req.body;
+
+    // Create the query and run it on the database
+    createQuery = 
+    `
+    INSERT INTO CompetingTeams (
+        EventID,
+        TeamID
+    )
+    VALUES
+    (
+        ${data.event},
+        ${data.team}
+    );
+    `;
+
+    db.pool.query(createQuery, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+            
+        }
+
+        else
+        {
+            // If there was no error, perform a SELECT
+            let selectQuery = 
+            `
+            SELECT CompetingTeams.CompetingTeamID, Events.Name AS Event, Teams.Name as Team
+            FROM CompetingTeams
+            JOIN Events ON CompetingTeams.EventID = Events.EventID
+            JOIN Teams ON CompetingTeams.TeamID = Teams.TeamID
+            ORDER BY CompetingTeamID ASC;
+            `
+
+            db.pool.query(selectQuery, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+                    
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
+// EventStreams
+app.post('/add-eventstream-ajax', function(req, res) 
+{
+    
+    let data = req.body;
+
+    // Create the query and run it on the database
+    createQuery = 
+    `
+    INSERT INTO EventStreams (
+        EventID,
+        ServiceID
+    )
+    VALUES
+    (
+        ${data.event},
+        ${data.service}
+    );
+    `;
+
+    db.pool.query(createQuery, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+            
+        }
+
+        else
+        {
+            // If there was no error, perform a SELECT
+            let selectQuery = 
+            `
+            SELECT EventStreams.EventStreamID, Events.Name AS Event, StreamingServices.Name as StreamingService
+            FROM EventStreams
+            JOIN Events ON EventStreams.EventID = Events.EventID
+            JOIN StreamingServices ON EventStreams.ServiceID = StreamingServices.ServiceID
+            ORDER BY EventStreamID ASC;
+            `
+
+            db.pool.query(selectQuery, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+                    
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
+app.delete('/delete-eventstream-ajax/', function(req, res, next)
+{
+    let data = req.body;
+    let EventStreamID = parseInt(data.id);
+    let deleteEventStreamsQuery = `DELETE FROM EventStreams WHERE EventStreamID = ?`;
+
+    db.pool.query(deleteEventStreamsQuery, [EventStreamID], function(error, rows, fields) {
+
+        if (error) {
+            console.log(error)
+            res.sendStatus(400)
+        }
+
+        else
+        {
+            res.sendStatus(204);
+        }
+    })
+});
+
+app.put('/put-eventstream-ajax', function(req, res, next)
+{
+    let data = req.body;
+  
+    let eventstreamid = data.eventstreamid;
+    let event = data.event;
+    let service = data.service;
+  
+    let queryUpdateEventStream = 
+    `
+    UPDATE EventStreams 
+    SET 
+    EventID = ?,
+    ServiceID = ?
+    WHERE EventStreamID = ?;
+    `;
+
+    let selectEventStreamQuery = 
+    `
+    SELECT EventStreams.EventStreamID, Events.EventID, Events.Name AS Event, StreamingServices.Name as StreamingService
+    FROM EventStreams
+    JOIN Events ON EventStreams.EventID = Events.EventID
+    JOIN StreamingServices ON EventStreams.ServiceID = StreamingServices.ServiceID
+    ORDER BY EventStreamID ASC;
+    `;
+  
+    // Run the 1st query
+    db.pool.query(queryUpdateEventStream, [event, service, eventstreamid], function(error, rows, fields){
+        if (error) {
+
+        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+        console.log(error);
+        res.sendStatus(400);
+        }
+
+        else
+        { 
+            // Run the 2nd query
+            db.pool.query(selectEventStreamQuery, [eventstreamid], function(error, rows, fields){
                 if (error) {
         
                 // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -458,6 +675,106 @@ app.put('/put-league-ajax', function(req, res, next)
                 else
                 {   
                     res.send({rows});
+                }
+            })
+        }
+    })
+});
+
+// Teams
+app.get('/teams', function(req, res)
+{
+    // Define our queries
+
+    let selectSportsQuery =
+    `
+    SELECT * FROM Sports;
+    `
+
+    let selectTeamsQuery = 
+    `
+    SELECT Teams.TeamID, Teams.Name, Teams.Coach, Sports.Name AS Sport
+    FROM Teams
+    JOIN Sports ON Teams.SportID = Sports.SportID
+    ORDER BY TeamID ASC;
+    `;
+
+    // Execute the queries
+    db.pool.query(selectTeamsQuery, function(error, rows, fields){
+        
+        // Saves the data from query
+        let teams = rows;
+        
+        // Run the another query after first
+
+        db.pool.query(selectSportsQuery, (error, rows, fields) => {
+            
+            let sports = rows
+
+            // Render the index.hbs file, and also send the renderer
+            // an object where 'data' is equal to the 'rows' we
+            // received back from the query
+            return res.render('teams', {data: teams, sports: sports});                                                                                                                                   
+        })   
+    })                                                                                               
+}); 
+
+app.post('/add-team-ajax', function(req, res) 
+{
+    
+    let data = req.body;
+
+    // Create the query and run it on the database
+    createQuery = 
+    `
+    INSERT INTO Teams (
+        Name, 
+        Coach,
+        SportID
+    )
+    VALUES
+    (
+        "${data.name}",
+        "${data.coach}",
+        ${data.sport}
+    );
+    `;
+
+    db.pool.query(createQuery, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+            
+        }
+
+        else
+        {
+            // If there was no error, perform a SELECT
+            selectQuery = 
+            `
+            SELECT Teams.TeamID, Teams.Name, Teams.Coach, Sports.Name AS Sport
+            FROM Teams
+            JOIN Sports ON Teams.SportID = Sports.SportID
+            ORDER BY TeamID ASC;
+            `;
+
+            db.pool.query(selectQuery, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+                    
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
                 }
             })
         }

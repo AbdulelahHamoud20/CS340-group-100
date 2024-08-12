@@ -15,6 +15,9 @@ The tables and forms were refitted to accomodate the sporting events database.
     <p>Description</p>
 
     <article>
+
+        <h3>Event Details</h3>
+
         {{!-- Create a table --}}
         <table id="events-table">
 
@@ -48,6 +51,73 @@ The tables and forms were refitted to accomodate the sporting events database.
                     <td>{{this.League}}</td>
                     <td>{{this.TicketPrice}}</td>
                     <td><button onclick="deleteEvent({{this.EventID}})">Delete</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </article>
+
+    <article>
+
+        <h3>Competing Team Details</h3>
+
+        {{!-- Create a table --}}
+        <table id="competingteams-table">
+
+            {{!-- Header section --}}
+            <thead>
+
+                {{!-- For just the first row, we print each key of the row object as a header cell so we
+                know what each column means when the page renders --}}
+                <tr>
+                    <th>CompetingTeamID</th>
+                    <th>Event</th>
+                    <th>Team</th>
+                </tr>
+            </thead>
+
+            {{!-- Body section --}}
+            <tbody>
+
+                {{!-- For each row, print the attribute columns in order --}}
+                {{#each competingTeams}}
+                <tr data-value={{this.EventID}}>
+                    <td>{{this.CompetingTeamID}}</td>
+                    <td>{{this.Event}}</td>
+                    <td>{{this.Team}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </article>
+
+    <article>
+
+        <h3>Event Streaming Details</h3>
+
+        {{!-- Create a table --}}
+        <table id="eventstreams-table">
+
+            {{!-- Header section --}}
+            <thead>
+                <tr>
+                    <th>EventStreamID</th>
+                    <th>Event</th>
+                    <th>StreamingService</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+
+            {{!-- Body section --}}
+            <tbody>
+
+                {{!-- For each row, print the attribute columns in order --}}
+                {{#each eventStreams}}
+                <tr id={{this.EventStreamID}} data-value={{this.EventID}}>
+                    <td>{{this.EventStreamID}}</td>
+                    <td>{{this.Event}}</td>
+                    <td>{{this.StreamingService}}</td>
+                    <td><button onclick="deleteEventStream({{this.EventStreamID}})">Delete</button></td>
                 </tr>
                 {{/each}}
             </tbody>
@@ -94,9 +164,7 @@ The tables and forms were refitted to accomodate the sporting events database.
 
             <input type="submit">
         </form>
-    </article>
 
-    <article id="update-event-article">
         <h3>Edit Event</h3>
         <p>Select an event to edit then fill</p>
         <form id="update-event-form-ajax">
@@ -145,9 +213,90 @@ The tables and forms were refitted to accomodate the sporting events database.
             <input type="submit">
         </form>
     </article>
+
+    <article>
+        {{!-- Form to add a record to the table  --}}
+        <h3 id="add-competingteam-form-header">Add a Competing Team</h3>
+        <p id="add-competingteam-form-description">Add a competing team by entering all the information below and press submit.</p>
+        <form id="add-competingteam-form-ajax">
+            <select name="input-event" id="input-event" required>
+                <option value="">Select an Event</option>
+                {{#each data}}
+                <option value="{{this.EventID}}">{{this.Name}}</option>
+                {{/each}}
+            </select>
+
+            <select name="input-team" id="input-team" required>
+                <option value="">Select a Team</option>
+                {{#each teams}}
+                <option value="{{this.TeamID}}">{{this.Name}}</option>
+                {{/each}}
+            </select>
+
+            <input type="submit">
+        </form>
+    </article>
+
+    <article>
+        {{!-- Form to add a record to the table  --}}
+        <h3 id="add-eventstream-form-header">Add a Streamed Event</h3>
+        <p id="add-eventstream-form-description">Add a streamed event by selecting all the information below and press submit.</p>
+        <form id="add-eventstream-form-ajax">
+            <select name="input-streamedevent" id="input-streamedevent" required>
+                <option value="">Select an Event</option>
+                {{#each data}}
+                <option value="{{this.EventID}}">{{this.Name}}</option>
+                {{/each}}
+            </select>
+
+            <select name="input-service" id="input-service" required>
+                <option value="">Select a Streaming Service</option>
+                {{#each streamingServices}}
+                <option value="{{this.ServiceID}}">{{this.Name}}</option>
+                {{/each}}
+            </select>
+
+            <input type="submit">
+        </form>
+
+        <h3>Edit a Streamed Event</h3>
+        <p>Select an event to edit then fill</p>
+        <form id="update-streamedevent-form-ajax">
+
+            <label for="input-streamedeventid-update">Streamed Event to Edit: </label>
+            <select name="input-streamedeventid-update" id="input-streamedeventid-update" required>
+                <option value="test">Select a Streamed Event</option>
+                {{#each eventStreams}}
+                <option value="{{this.EventStreamID}}">{{this.Event}} - {{this.StreamingService}}</option>
+                {{/each}}
+            </select>
+
+            <select name="input-streamedevent-update" id="input-streamedevent-update" required>
+                <option value="">Select an Event</option>
+                {{#each data}}
+                <option value="{{this.EventID}}">{{this.Name}}</option>
+                {{/each}}
+            </select>
+
+            <select name="input-service-update" id="input-service-update" required>
+                <option value="">Select a Streaming Service</option>
+                {{#each streamingServices}}
+                <option value="{{this.ServiceID}}">{{this.Name}}</option>
+                {{/each}}
+            </select>
+
+            <input type="submit">
+        </form>
+
+    </article>
+
 </section>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 <script src="./js/add_event.js"></script>
 <script src="./js/delete_event.js"></script>
 <script src="./js/update_event.js"></script>
+<script src="./js/add_competingteam.js"></script>
+<script src="./js/add_streamingevent.js"></script>
+<script src="./js/delete_streamingevent.js"></script>
+<script src="./js/update_streamingevent.js"></script>
