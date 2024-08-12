@@ -1,7 +1,7 @@
 {
   "name": "sportingeventsmanagement",
   "version": "1.0.0",
-  "description": "",
+  "description": "Citation for the following code: Date: 8/9/2024. Copied from /OR/ Adapted from /OR/ Based onSource URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

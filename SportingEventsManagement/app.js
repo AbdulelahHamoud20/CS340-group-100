@@ -1,3 +1,11 @@
+/*
+Citation for the following JavaScript code:
+Date: 8/9/2024
+Copied from /OR/ Adapted from /OR/ Based on
+Source URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main 
+Added roots to the original code based on the sporting event database.
+*/
+
 // App.js
 
 /*
@@ -28,7 +36,13 @@ var db = require('./database/db-connector')
 
 app.get('/', function(req, res)
 {
-    // Define our query
+    res.render('index')
+});
+
+// Events
+app.get('/events', function(req, res)
+{
+    // Define our queries
     let selectVenuesQuery =
     `
     SELECT * FROM Venues;
@@ -76,7 +90,7 @@ app.get('/', function(req, res)
                     // Render the index.hbs file, and also send the renderer
                     // an object where 'data' is equal to the 'rows' we
                     // received back from the query
-                    return res.render('index', {data: events, venues: venues, sports: sports, leagues: leagues});  
+                    return res.render('events', {data: events, venues: venues, sports: sports, leagues: leagues});  
                 })                                                                
             })                                                                  
         })   
@@ -251,7 +265,189 @@ app.put('/put-event-ajax', function(req, res, next)
 
         else
         { 
+            // Run the 2nd query
             db.pool.query(selectEventsQuery, [eventid], function(error, rows, fields){
+                if (error) {
+        
+                // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                console.log(error);
+                res.sendStatus(400);
+                }
+
+                else
+                {   
+                    res.send({rows});
+                }
+            })
+        }
+    })
+});
+
+// Leagues
+app.get('/leagues', function(req, res)
+{
+    // Define our queries
+
+    let selectSportsQuery =
+    `
+    SELECT * FROM Sports;
+    `
+
+    let selectLeaguesQuery = 
+    `
+    SELECT Leagues.LeagueID, Leagues.Name, Leagues.YearFounded, Leagues.Commisioner, Sports.Name AS Sport
+    FROM Leagues
+    JOIN Sports ON Leagues.SportID = Sports.SportID
+    ORDER BY LeagueID ASC;
+    `;
+
+    // Execute the queries
+    db.pool.query(selectLeaguesQuery, function(error, rows, fields){
+        
+        // Saves the data from query
+        let leagues = rows;
+        
+        // Run the another query after first
+
+        db.pool.query(selectSportsQuery, (error, rows, fields) => {
+            
+            let sports = rows
+
+            // Render the index.hbs file, and also send the renderer
+            // an object where 'data' is equal to the 'rows' we
+            // received back from the query
+            return res.render('leagues', {data: leagues, sports: sports});                                                                                                                                   
+        })   
+    })                                                                                               
+}); 
+
+app.post('/add-league-ajax', function(req, res) 
+{
+    
+    let data = req.body;
+
+    // Create the query and run it on the database
+    createQuery = 
+    `
+    INSERT INTO Leagues (
+        Name, 
+        YearFounded,
+        Commisioner,
+        SportID
+    )
+    VALUES
+    (
+        "${data.name}",
+        ${data.yearFounded},
+        "${data.commisioner}",
+        ${data.sport}
+    );
+    `;
+
+    db.pool.query(createQuery, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+            
+        }
+
+        else
+        {
+            // If there was no error, perform a SELECT
+            selectQuery = 
+            `
+            SELECT Leagues.LeagueID, Leagues.Name, Leagues.YearFounded, Leagues.Commisioner, Sports.Name AS Sport
+            FROM Leagues
+            JOIN Sports ON Leagues.SportID = Sports.SportID
+            ORDER BY LeagueID ASC;
+            `;
+
+            db.pool.query(selectQuery, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+                    
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
+app.delete('/delete-league-ajax/', function(req, res, next)
+{
+    let data = req.body;
+    let LeagueID = parseInt(data.id);
+    let deleteLeagueQuery = `DELETE FROM Leagues WHERE LeagueID = ?`;
+  
+    // Run the 1st query
+    db.pool.query(deleteLeagueQuery, [LeagueID], function(error, rows, fields){
+        if (error) {
+
+        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+        console.log(error);
+        res.sendStatus(400);
+        }
+
+        else
+        {
+            res.sendStatus(204);
+        }
+    })
+});
+
+app.put('/put-league-ajax', function(req, res, next)
+{
+    let data = req.body;
+  
+    let leagueid = data.leagueid;
+    let name = data.name;
+    let yearfounded = data.yearfounded;
+    let commisioner = data.commisioner;
+    let sport = data.sport;
+  
+    let queryUpdateLeague = 
+    `
+    UPDATE Leagues 
+    SET 
+    Name = ?, 
+    YearFounded = ?, 
+    Commisioner = ?, 
+    SportID = ? 
+    WHERE LeagueID = ?;
+    `;
+    let selectLeaguesQuery = 
+    `
+    SELECT Leagues.LeagueID, Leagues.Name, Leagues.YearFounded, Leagues.Commisioner, Sports.Name AS Sport
+    FROM Leagues
+    JOIN Sports ON Leagues.SportID = Sports.SportID
+    WHERE LeagueID = ?;
+    `;
+  
+    // Run the 1st query
+    db.pool.query(queryUpdateLeague, [name, yearfounded, commisioner, sport, leagueid], function(error, rows, fields){
+        if (error) {
+
+        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+        console.log(error);
+        res.sendStatus(400);
+        }
+
+        else
+        { 
+            // Run the 2nd query
+            db.pool.query(selectLeaguesQuery, [leagueid], function(error, rows, fields){
                 if (error) {
         
                 // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.

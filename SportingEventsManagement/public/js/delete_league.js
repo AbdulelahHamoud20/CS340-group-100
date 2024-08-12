@@ -7,11 +7,11 @@ Reworked the request to better accomodate the attributes of the corresponding ta
 */
 
 // Sends request to delete entry from the database then updates the UI
-function deleteEvent(EventID) {
+function deleteLeague(LeagueID) {
 
-    let link = '/delete-event-ajax/';
+    let link = '/delete-league-ajax/';
     let data = {
-      id: EventID
+      id: LeagueID
     };
   
     $.ajax({
@@ -20,28 +20,28 @@ function deleteEvent(EventID) {
       data: JSON.stringify(data),
       contentType: "application/json; charset=utf-8",
       success: function(result) {
-        deleteRow(EventID);
+        deleteRow(LeagueID);
         }
     });
 }
   
 // Removes the entry from the user-facing table
-function deleteRow(EventID) {
-    let table = document.getElementById("events-table");
+function deleteRow(LeagueID) {
+    let table = document.getElementById("leagues-table");
     for (let i = 0, row; row = table.rows[i]; i++) {
-        if (table.rows[i].getAttribute("data-value") == EventID) {
+        if (table.rows[i].getAttribute("data-value") == LeagueID) {
             table.deleteRow(i);
-            deleteDropDownMenu(EventID)
+            deleteDropDownMenu(LeagueID)
             break;
         }
     }
 }
 
 // Removes the deleted entry from the edit dropdown list
-function deleteDropDownMenu(EventID) {
-    let selectMenu = document.getElementById("input-event-update");
+function deleteDropDownMenu(LeagueID) {
+    let selectMenu = document.getElementById("input-league-update");
     for (let i = 0; i < selectMenu.length; i++) {
-        if (Number(selectMenu.options[i].attributes[0].value) === Number(EventID)) {
+        if (Number(selectMenu.options[i].attributes[0].value) === Number(LeagueID)) {
             selectMenu[i].remove();
             break;
         }
