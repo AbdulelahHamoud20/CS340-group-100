@@ -10,14 +10,13 @@ The tables and forms were refitted to accomodate the sporting leagues database.
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <section>
-
+    
     <article>
 
-        <h3>Teams</h3>
-        <p>Displays team information from different sports such as name, coach, and sport.</p>
-        
+        <h3>Sports</h3>
+        <p>Serves as a reference guide to different types of sports, displaying name, rules manual, and a short description.</p>
         {{!-- Create a table --}}
-        <table id="teams-table">
+        <table id="sports-table">
 
             {{!-- Header section --}}
             <thead>
@@ -38,11 +37,11 @@ The tables and forms were refitted to accomodate the sporting leagues database.
 
                 {{!-- For each row, print the attribute columns in order --}}
                 {{#each data}}
-                <tr data-value={{this.TeamID}}>
-                    <td>{{this.TeamID}}</td>
+                <tr data-value={{this.SportID}}>
+                    <td>{{this.SportID}}</td>
                     <td>{{this.Name}}</td>
-                    <td>{{this.Coach}}</td>
-                    <td>{{this.Sport}}</td>
+                    <td>{{this.RulesManual}}</td>
+                    <td>{{this.Description}}</td>
                 </tr>
                 {{/each}}
             </tbody>
@@ -51,21 +50,17 @@ The tables and forms were refitted to accomodate the sporting leagues database.
 
     <article>
         {{!-- Form to add a record to the table  --}}
-        <h3 id="add-team-form-header">Add Team</h3>
-        <p id="add-team-form-description">Fill out the information below and click submit when finished.</p>
-        <form id="add-team-form-ajax">
+        <h3 id="add-sport-form-header">Add Sport</h3>
+        <p id="add-sport-form-description">Fill out the information below and click submit when finished.</p>
+        <form id="add-sport-form-ajax">
             <label for="input-name">Name: </label>
             <input type="text" name="input-name" id="input-name" required>
             
-            <label for="input-coach">Coach: </label>
-            <input type="text" name="input-coach" id="input-coach" required>
+            <label for="input-rules">Rules Manual: </label>
+            <input type="text" name="input-rules" id="input-rules" required>
 
-            <select name="input-sport" id="input-sport" required>
-                <option value="">Select a Sport</option>
-                {{#each sports}}
-                <option value="{{this.SportID}}">{{this.Name}}</option>
-                {{/each}}
-            </select>
+            <label for="input-description">Description: </label>
+            <textarea name="input-description" id="input-description" required></textarea>
 
             <input type="submit">
         </form>
@@ -73,4 +68,4 @@ The tables and forms were refitted to accomodate the sporting leagues database.
 </section>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-<script src="./js/add_team.js"></script>
+<script src="./js/add_sport.js"></script>

@@ -1,7 +1,7 @@
 <!--
 Citation for the following Handlebars code:
 Date: 8/9/2024
-Copied from /OR/ Adapted from /OR/ Based on
+Adapted from
 Source URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main 
 The tables and forms were refitted to accomodate the sporting events database.
 -->
@@ -11,12 +11,10 @@ The tables and forms were refitted to accomodate the sporting events database.
 
 <section>
 
-    <h2>Events</h2>
-    <p>Description</p>
-
     <article>
 
-        <h3>Event Details</h3>
+        <h3>Events</h3>
+        <p>Add, edit, and delete information about sporting events, including name, venue, date, sport, score, league and ticket price.</p>
 
         {{!-- Create a table --}}
         <table id="events-table">
@@ -59,7 +57,8 @@ The tables and forms were refitted to accomodate the sporting events database.
 
     <article>
 
-        <h3>Competing Team Details</h3>
+        <h3>Competing Teams</h3>
+        <p>Represents teams competing against each other in a sporting event.</p>
 
         {{!-- Create a table --}}
         <table id="competingteams-table">
@@ -93,7 +92,8 @@ The tables and forms were refitted to accomodate the sporting events database.
 
     <article>
 
-        <h3>Event Streaming Details</h3>
+        <h3>Event Streamings</h3>
+        <p>Represents streaming services available to watch a sporting event.</p>
 
         {{!-- Create a table --}}
         <table id="eventstreams-table">
@@ -127,7 +127,7 @@ The tables and forms were refitted to accomodate the sporting events database.
     <article>
         {{!-- Form to add a record to the table  --}}
         <h3 id="add-event-form-header">Add Event</h3>
-        <p id="add-event-form-description">Add an event by entering all the information below and press submit.</p>
+        <p id="add-event-form-description">Fill out the information below and click submit when finished.</p>
         <form id="add-event-form-ajax">
             <label for="input-name">Name: </label>
             <input type="text" name="input-name" id="input-name" required>
@@ -160,13 +160,13 @@ The tables and forms were refitted to accomodate the sporting events database.
             </select>
 
             <label for="input-ticketprice">Ticket Price: </label>
-            <input type="number" name="input-ticketprice" id="input-ticketprice" required>
+            <input type="number" min="0" name="input-ticketprice" id="input-ticketprice" required>
 
             <input type="submit">
         </form>
 
         <h3>Edit Event</h3>
-        <p>Select an event to edit then fill</p>
+        <p>Fill out the information below and click submit when finished.</p>
         <form id="update-event-form-ajax">
 
             <label for="input-event-update">Event to Edit: </label>
@@ -205,10 +205,11 @@ The tables and forms were refitted to accomodate the sporting events database.
                 {{#each leagues}}
                 <option value="{{this.LeagueID}}">{{this.Name}}</option>
                 {{/each}}
+                <option value="None">Disassociate from a League</option>
             </select>
 
             <label for="input-ticketprice-update">Ticket Price: </label>
-            <input type="number" name="input-ticketprice-update" id="input-ticketprice-update" required>
+            <input type="number" min="0" name="input-ticketprice-update" id="input-ticketprice-update" required>
 
             <input type="submit">
         </form>
@@ -217,7 +218,7 @@ The tables and forms were refitted to accomodate the sporting events database.
     <article>
         {{!-- Form to add a record to the table  --}}
         <h3 id="add-competingteam-form-header">Add a Competing Team</h3>
-        <p id="add-competingteam-form-description">Add a competing team by entering all the information below and press submit.</p>
+        <p id="add-competingteam-form-description">Fill out the information below and click submit when finished.</p>
         <form id="add-competingteam-form-ajax">
             <select name="input-event" id="input-event" required>
                 <option value="">Select an Event</option>
@@ -240,7 +241,7 @@ The tables and forms were refitted to accomodate the sporting events database.
     <article>
         {{!-- Form to add a record to the table  --}}
         <h3 id="add-eventstream-form-header">Add a Streamed Event</h3>
-        <p id="add-eventstream-form-description">Add a streamed event by selecting all the information below and press submit.</p>
+        <p id="add-eventstream-form-description">Fill out the information below and click submit when finished.</p>
         <form id="add-eventstream-form-ajax">
             <select name="input-streamedevent" id="input-streamedevent" required>
                 <option value="">Select an Event</option>
@@ -260,7 +261,7 @@ The tables and forms were refitted to accomodate the sporting events database.
         </form>
 
         <h3>Edit a Streamed Event</h3>
-        <p>Select an event to edit then fill</p>
+        <p>Fill out the information below and click submit when finished.</p>
         <form id="update-streamedevent-form-ajax">
 
             <label for="input-streamedeventid-update">Streamed Event to Edit: </label>

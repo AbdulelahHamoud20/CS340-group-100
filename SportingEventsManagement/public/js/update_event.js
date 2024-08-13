@@ -1,7 +1,7 @@
 /*
 Citation for the following JavaScript code:
 Date: 8/9/2024
-Copied from /OR/ Adapted from /OR/ Based on
+Adapted from
 Source URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main 
 Reworked the request to better accomodate the attributes of the corresponding table.
 */

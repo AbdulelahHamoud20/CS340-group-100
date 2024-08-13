@@ -1,7 +1,7 @@
 /*
 Citation for the following JavaScript code:
 Date: 8/9/2024
-Copied from /OR/ Adapted from /OR/ Based on
+Adapted from
 Source URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main 
 Reworked the request to better accomodate the attributes of the corresponding table.
 */
@@ -39,7 +39,7 @@ addEventStreamForm.addEventListener("submit", function (e) {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
 
             // Add the new data to the table
-            addRowToTable(xhttp.response);
+            addEventStreamRowToTable(xhttp.response);
 
             // Clear the input fields for another transaction
             inputEvent.value = '';
@@ -57,7 +57,7 @@ addEventStreamForm.addEventListener("submit", function (e) {
 
 
 // Creates a single row from an Object representing a single record
-addRowToTable = (data) => {
+addEventStreamRowToTable = (data) => {
 
     // Get a reference to the current table on the page and clear it out.
     let currentTable = document.getElementById("eventstreams-table");
