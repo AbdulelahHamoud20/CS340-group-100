@@ -12,7 +12,8 @@ SELECT Events.EventID, Events.Name, Events.Date, Venues.Name AS Venue, Sports.Na
 FROM Events
 JOIN Venues ON Events.VenueID = Venues.VenueID
 JOIN Sports ON Events.SportID = Sports.SportID
-JOIN Leagues ON Events.LeagueID = Leagues.LeagueID;
+LEFT JOIN Leagues ON Events.LeagueID = Leagues.LeagueID
+ORDER BY EventID ASC;
 
 -- Add a new event
 INSERT INTO Events (
@@ -45,7 +46,10 @@ SportID = ~SportID_Dropdown_Input,
 Score = ~Score_Input, 
 LeagueID = ~LeagueID_Dropdown_Input, 
 TicketPrice = ~TicketPrice_Input 
-WHERE EventID= ~EventID_from_the_update_form
+WHERE EventID= ~EventID_from_the_update_form_dropdown
+
+-- Delete an event
+DELETE FROM Events WHERE EventID = ~EventID_Input
 
 /*
 Manipulates data in the CompetingTeams table
@@ -55,7 +59,8 @@ Manipulates data in the CompetingTeams table
 SELECT CompetingTeams.CompetingTeamID, Events.Name AS Event, Teams.Name as Team
 FROM CompetingTeams
 JOIN Events ON CompetingTeams.EventID = Events.EventID
-JOIN Teams ON CompetingTeams.TeamID = Teams.TeamID;
+JOIN Teams ON CompetingTeams.TeamID = Teams.TeamID
+ORDER BY CompetingTeamID ASC;
 
 -- Add a new competing team (M-to-M relationship addition)
 INSERT INTO CompetingTeams (
@@ -75,7 +80,8 @@ Manipulates data in the Teams table
 -- Display the content of the Teams table
 SELECT Teams.TeamID, Teams.Name, Teams.Coach, Sports.Name AS Sport
 FROM Teams
-JOIN Sports ON Teams.SportID = Sports.SportID;
+JOIN Sports ON Teams.SportID = Sports.SportID
+ORDER BY TeamID ASC;
 
 -- Add a new team 
 INSERT INTO Teams (
@@ -90,6 +96,9 @@ VALUES
     ~SportID_Dropdown_Input
 );
 
+-- Get the TeamID and name for dropdown input
+SELECT TeamID, Name FROM Teams;
+
 /*
 Manipulates data in the Players table
 */
@@ -97,13 +106,8 @@ Manipulates data in the Players table
 -- Display the content of the Players table
 SELECT Players.PlayerID, Players.Name, Players.Position, Teams.Name AS Team
 FROM Players
-JOIN Teams ON Players.TeamID = Teams.TeamID;
-
--- Search for and diplsay a player using the search bar 
-SELECT Players.PlayerID, Players.Name, Players.Position, Teams.Name AS Team
-FROM Players
 JOIN Teams ON Players.TeamID = Teams.TeamID
-WHERE Players.Name = ~Player_Name_Search_Input;
+ORDER BY PlayerID ASC;
 
 -- Add a new player
 INSERT INTO Players (
@@ -126,7 +130,8 @@ Manipulates data in the EventStreams table
 SELECT EventStreams.EventStreamID, Events.Name AS Event, StreamingServices.Name as StreamingService
 FROM EventStreams
 JOIN Events ON EventStreams.EventID = Events.EventID
-JOIN StreamingServices ON EventStreams.ServiceID = StreamingServices.ServiceID;
+JOIN StreamingServices ON EventStreams.ServiceID = StreamingServices.ServiceID
+ORDER BY EventStreamID ASC;
 
 -- Add new streamed event (M-to-M relationship addition)
 INSERT INTO EventStreams (
@@ -140,10 +145,10 @@ VALUES
 );
 
 -- update a streamed event's data using the update EventStreams form
-UPDATE EventStreams SET EventID = ~EventID_Dropdown_Input, ServiceID= ~ServiceID_Dropdown_Input WHERE EventStreamID= ~EventStreamID_from_the_update_form
+UPDATE EventStreams SET EventID = ~EventID_Dropdown_Input, ServiceID= ~ServiceID_Dropdown_Input WHERE EventStreamID= ~EventStreamID_from_the_update_form_Dropdown
 
 -- Dissociate a streaming service from an event (M-to-M relationship deletion)
-DELETE FROM EventStreams WHERE EventStreamID = ~EventStreamID_selected_from_EventStream_page
+DELETE FROM EventStreams WHERE EventStreamID = ~EventStreamID_selected
 
 /*
 Manipulates data in the StreamingServices table
@@ -163,12 +168,16 @@ VALUES
     ~Description_Input
 );
 
+-- Get ServiceID and name for dropdown input
+SELECT ServiceID, Name FROM StreamingServices;
+
 /*
 Manipulates data in the Venues table
 */
 
 -- Display the content of the Venues table
-SELECT * FROM Venues;
+SELECT * FROM Venues
+ORDER BY VenueID ASC;
 
 -- Add a new venue
 INSERT INTO Venues (
@@ -187,6 +196,9 @@ VALUES
     ~Capacity_Input
 );
 
+-- Get VenueID and name for dropdown input
+SELECT VenueID, Name FROM Venues;
+
 /*
 Manipulates data in the Leagues table
 */
@@ -194,7 +206,8 @@ Manipulates data in the Leagues table
 -- Display the content of the Leagues table
 SELECT Leagues.LeagueID, Leagues.Name, Leagues.YearFounded, Leagues.Commisioner, Sports.Name AS Sport
 FROM Leagues
-JOIN Sports ON Leagues.SportID = Sports.SportID;
+JOIN Sports ON Leagues.SportID = Sports.SportID
+ORDER BY LeagueID ASC;
 
 -- Add a new league
 INSERT INTO Leagues (
@@ -211,12 +224,29 @@ VALUES
     ~SportID_Dropdown_Input
 );
 
+-- Delete a league
+DELETE FROM Leagues WHERE LeagueID = ~LeagueID_Input
+
+-- Edit a league
+UPDATE Leagues 
+SET 
+Name = ~Name_Input, 
+YearFounded = ~YearFounded_Input, 
+Commisioner = ~Comissioner_Input, 
+SportID = SportID_Dropdown_Input 
+WHERE LeagueID = LeagueID_Input_Dropdown;
+
+
+-- Get the LeagueID and name for dropdown input
+SELECT LeagueID, Name FROM Leagues;
+
 /*
 Manipulates data in the Sports table
 */
 
 -- Display the content of the Sports table
-SELECT * FROM Sports;
+SELECT * FROM Sports
+ORDER BY SportID ASC;
 
 -- Add a mew sport
 INSERT INTO Sports (
@@ -230,3 +260,6 @@ VALUES
     ~RulesManual_Input,
     ~Description_Input
 );
+
+-- Get the SportID and name for dropdown input
+SELECT SportID, Name FROM Sports;
